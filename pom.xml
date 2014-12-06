@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
+    <packaging>jar</packaging>
+    <groupId>org.webjars</groupId>
+    <artifactId>tag-it</artifactId>
+    <version>2.0-SNAPSHOT</version>
+    <name>Tag-it</name>
+    <description>WebJar for Tag-it</description>
+    <url>http://webjars.org</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <upstream.version>2.0</upstream.version>
+        <upstream.url>https://raw.githubusercontent.com/aehlke/tag-it/v${upstream.version}</upstream.url>
+        <destDir>${project.build.outputDirectory}/META-INF/resources/webjars/${project.artifactId}/${project.version}</destDir>
+        <requirejs>
+            {
+                "paths": {
+                    "tag-it": "js/tag-it"
+                },
+                "shim": {
+                    "tag-it": ["jquery-ui"]
+                }
+            }
+        </requirejs>
+    </properties>
+
+    <developers>
+        <developer>
+            <id>jamesward</id>
+            <name>James Ward</name>
+            <email>james@jamesward.com</email>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>https://github.com/aehlke/tag-it/blob/master/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>http://github.com/webjars/tag-it</url>
+        <connection>scm:git:https://github.com/webjars/tag-it.git</connection>
+        <developerConnection>scm:git:https://github.com/webjars/tag-it.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery-ui</artifactId>
+            <version>1.11.2</version>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals><goal>run</goal></goals>
+                        <configuration>
+                            <target>
+                                <mkdir dir="${destDir}/css" />
+                                <get src="${upstream.url}/css/examples.css" dest="${destDir}/css" />
+                                <get src="${upstream.url}/css/jquery.tagit.css" dest="${destDir}/css" />
+                                <get src="${upstream.url}/css/master.css" dest="${destDir}/css" />
+                                <get src="${upstream.url}/css/reset.css" dest="${destDir}/css" />
+                                <get src="${upstream.url}/css/tagit.ui-zendesk.css" dest="${destDir}/css" />
+
+                                <mkdir dir="${destDir}/js" />
+                                <get src="${upstream.url}/js/tag-it.js" dest="${destDir}/js" />
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.2</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>sonatype-nexus-staging</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
